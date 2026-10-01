@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}LITRevu{% endblock %} | LITRevu</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu principal</a>
+
+    {# Bandeau du wireframe : nom du site centré, navigation à droite #}
+    <header class="site-header">
+        <p class="site-name">LITRevu</p>
+        {% if user.is_authenticated %}
+            <nav aria-label="Navigation principale" class="site-nav">
+                <ul class="nav-list">
+                    <li>
+                        <a href="{% url 'flux' %}"
+                           {% if request.resolver_match.url_name == 'flux' %}aria-current="page"{% endif %}>Flux</a>
+                    </li>
+                    {# Ajouter « Posts » et « Abonnements » quand les vues existeront #}
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="link-button">Se déconnecter</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+    </header>
+
+    <main id="contenu" tabindex="-1">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

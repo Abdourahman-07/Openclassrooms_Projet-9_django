@@ -1,0 +1,17 @@
+{% comment %}
+    Champ de formulaire accessible : label, aide et erreurs reliés au champ.
+    Le label est masqué visuellement (le wireframe n'affiche qu'un placeholder)
+    mais reste lu par les lecteurs d'écran.
+{% endcomment %}
+<div class="form-field{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id_for_label }}" class="visually-hidden">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}
+        <div id="{{ field.auto_id }}_helptext" class="help-text">{{ field.help_text|safe }}</div>
+    {% endif %}
+    {% if field.errors %}
+        <ul id="{{ field.auto_id }}_errors" class="field-errors">
+            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+</div>

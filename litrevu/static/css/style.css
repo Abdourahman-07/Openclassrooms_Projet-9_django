@@ -1,0 +1,262 @@
+/* Styles LITRevu, calqués sur le wireframe (bandeau, boutons arrondis, champs encadrés).
+   Contrastes vérifiés sur fond blanc (#ffffff) :
+   #1a1a1a → 17,4:1 ; #4a4a4a → 8,9:1 ; #b00020 → 6,9:1 ; #767676 → 4,5:1 */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+}
+
+h1,
+h2 {
+    font-size: 1.25rem;
+    font-weight: normal;
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
+/* Masqué à l'écran, lu par les lecteurs d'écran */
+.visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.skip-link {
+    left: 1rem;
+    position: absolute;
+    top: -3rem;
+}
+
+.skip-link:focus {
+    background: #ffffff;
+    padding: 0.5rem;
+    top: 0.5rem;
+}
+
+/* --- Bandeau : nom centré, navigation à droite --- */
+
+.site-header {
+    align-items: center;
+    border-bottom: 1px solid #1a1a1a;
+    display: grid;
+    gap: 0.5rem 1rem;
+    grid-template-columns: 1fr auto 1fr;
+    min-height: 3rem;
+    padding: 0.5rem 1rem;
+}
+
+.site-name {
+    font-size: 1rem;
+    grid-column: 2;
+    margin: 0;
+}
+
+.site-nav {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list a {
+    color: inherit;
+}
+
+.nav-list a[aria-current="page"] {
+    font-weight: bold;
+}
+
+main {
+    margin: 0 auto;
+    max-width: 52rem;
+    padding: 2.5rem 1rem;
+}
+
+/* --- Page d'accueil : inscription à gauche, connexion à droite --- */
+
+.home-columns {
+    align-items: start;
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+.home-signup {
+    padding-top: 1.75rem; /* aligne le bouton « S'inscrire » sur le premier champ */
+    text-align: center;
+}
+
+/* --- Page d'inscription : formulaire étroit et centré --- */
+
+.signup {
+    margin: 0 auto;
+    max-width: 22.5rem;
+}
+
+.form-note {
+    color: #4a4a4a;
+    font-size: 0.9rem;
+    margin: -1rem 0 1rem;
+    text-align: center;
+}
+
+/* --- Champs et boutons --- */
+
+.form-field {
+    margin-bottom: 0.75rem;
+}
+
+.form-field input {
+    border: 1px solid #1a1a1a;
+    font: inherit;
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+    width: 100%;
+}
+
+.form-field input::placeholder {
+    color: #767676;
+    opacity: 1;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+}
+
+.button {
+    background: #ffffff;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: inline-block;
+    font: inherit;
+    font-size: 0.9rem;
+    min-width: 6.5rem;
+    padding: 0.35rem 1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #f0f0f0;
+}
+
+.form-field input:focus-visible,
+.button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #0b57d0;
+    outline-offset: 2px;
+}
+
+/* --- Aide et erreurs de formulaire --- */
+
+.help-text {
+    color: #4a4a4a;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.help-text ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+}
+
+.field-errors,
+.form-errors ul {
+    color: #b00020;
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+}
+
+/* L'erreur n'est pas signalée que par la couleur (WCAG 1.4.1) */
+.field-errors li::before,
+.form-errors li::before {
+    content: "⚠ ";
+}
+
+.form-errors {
+    border: 2px solid #b00020;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+}
+
+.has-error input {
+    border: 2px solid #b00020;
+}
+
+/* Bouton « Se déconnecter » présenté comme un lien de navigation */
+.logout-form {
+    display: inline;
+    margin: 0;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.link-button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+}
+
+main:focus {
+    outline: none; /* cible du lien d'évitement, pas un élément interactif */
+}
+
+/* --- Petits écrans : colonnes empilées --- */
+
+@media (max-width: 40rem) {
+    .site-header {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .site-name,
+    .site-nav {
+        grid-column: 1;
+        justify-self: center;
+    }
+
+    .home-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .home-signup {
+        padding-top: 0;
+    }
+}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<h1 class="visually-hidden">Bienvenue sur LITRevu</h1>
+
+<div class="home-columns">
+    <section class="home-signup" aria-labelledby="titre-inscription">
+        <h2 id="titre-inscription">Inscrivez-vous maintenant</h2>
+        <a class="button" href="{% url 'signup' %}">S'inscrire</a>
+    </section>
+
+    <section class="home-login" aria-labelledby="titre-connexion">
+        <h2 id="titre-connexion">Connectez-vous</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% include "_non_field_errors.html" %}
+            {% for field in form %}
+                {% include "_form_field.html" %}
+            {% endfor %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="form-actions">
+                <button type="submit" class="button">Se connecter</button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
