@@ -1,17 +1,23 @@
 {% comment %}
     Champ de formulaire accessible : label, aide et erreurs reliés au champ.
-    Le label est masqué visuellement (le wireframe n'affiche qu'un placeholder)
-    mais reste lu par les lecteurs d'écran.
+    - hide_label=True masque le label visuellement (wireframe des pages de
+      connexion et d'inscription) ; il reste lu par les lecteurs d'écran.
+    - Les boutons radio sont regroupés dans un fieldset avec une légende.
 {% endcomment %}
-<div class="form-field{% if field.errors %} has-error{% endif %}">
-    <label for="{{ field.id_for_label }}" class="visually-hidden">{{ field.label }}</label>
-    {{ field }}
-    {% if field.help_text %}
-        <div id="{{ field.auto_id }}_helptext" class="help-text">{{ field.help_text|safe }}</div>
-    {% endif %}
-    {% if field.errors %}
-        <ul id="{{ field.auto_id }}_errors" class="field-errors">
-            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
-        </ul>
-    {% endif %}
-</div>
+{% if field.widget_type == "radioselect" %}
+    <fieldset class="form-field{% if field.errors %} has-error{% endif %}">
+        <legend>{{ field.label }}</legend>
+        <div class="radio-choices">
+            {% for radio in field %}
+                <label for="{{ radio.id_for_label }}">{{ radio.tag }} {{ radio.choice_label }}</label>
+            {% endfor %}
+        </div>
+        {% include "_field_messages.html" %}
+    </fieldset>
+{% else %}
+    <div class="form-field{% if field.errors %} has-error{% endif %}">
+        <label for="{{ field.id_for_label }}"{% if hide_label %} class="visually-hidden"{% endif %}>{{ field.label }}</label>
+        {{ field }}
+        {% include "_field_messages.html" %}
+    </div>
+{% endif %}

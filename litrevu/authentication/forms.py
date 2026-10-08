@@ -7,16 +7,20 @@ class AccessibleFormMixin:
 
     - aria-describedby pointe vers l'aide et/ou le message d'erreur ;
     - aria-invalid="true" est ajouté aux champs en erreur ;
-    - le libellé est repris en placeholder, comme sur le wireframe
+    - si label_as_placeholder est vrai, le libellé est repris en placeholder,
+      comme sur le wireframe des pages de connexion et d'inscription
       (le <label> reste présent pour les lecteurs d'écran).
     Les identifiants correspondent à ceux générés dans _form_field.html
     (suppose l'auto_id par défaut "id_<nom>" et aucun préfixe de formulaire).
     """
 
+    label_as_placeholder = False
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
-            field.widget.attrs.setdefault("placeholder", field.label)
+            if self.label_as_placeholder:
+                field.widget.attrs.setdefault("placeholder", field.label)
             if field.help_text:
                 field.widget.attrs["aria-describedby"] = f"id_{name}_helptext"
 
@@ -35,6 +39,8 @@ class AccessibleFormMixin:
 
 
 class SignupForm(AccessibleFormMixin, UserCreationForm):
+    label_as_placeholder = True
+
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ("username",)
@@ -48,4 +54,4 @@ class SignupForm(AccessibleFormMixin, UserCreationForm):
 
 
 class LoginForm(AccessibleFormMixin, AuthenticationForm):
-    pass
+    label_as_placeholder = True

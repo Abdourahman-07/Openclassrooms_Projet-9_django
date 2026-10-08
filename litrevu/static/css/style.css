@@ -129,12 +129,59 @@ main {
     margin-bottom: 0.75rem;
 }
 
-.form-field input {
+.form-field > label,
+.form-field > legend {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Champs texte (les boutons radio et le choix de fichier gardent leur style natif) */
+.form-field input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
+.form-field textarea {
     border: 1px solid #1a1a1a;
     font: inherit;
     padding: 0.4rem 0.5rem;
-    text-align: center;
     width: 100%;
+}
+
+.form-field textarea {
+    min-height: 10rem;
+    resize: vertical;
+}
+
+/* Pages de connexion et d'inscription : texte centré comme sur le wireframe */
+.auth-form .form-field input {
+    text-align: center;
+}
+
+fieldset.form-field {
+    border: 0;
+    margin: 0 0 0.75rem;
+    padding: 0;
+}
+
+fieldset.form-field > legend {
+    padding: 0;
+}
+
+.radio-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding: 0.25rem 0 0 1rem;
+}
+
+.radio-choices label {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.35rem;
+}
+
+.radio-choices input {
+    height: 1.1rem;
+    margin: 0;
+    width: 1.1rem;
 }
 
 .form-field input::placeholder {
@@ -169,6 +216,7 @@ main {
 }
 
 .form-field input:focus-visible,
+.form-field textarea:focus-visible,
 .button:focus-visible,
 a:focus-visible {
     outline: 3px solid #0b57d0;
@@ -236,6 +284,141 @@ a:focus-visible {
 
 main:focus {
     outline: none; /* cible du lien d'évitement, pas un élément interactif */
+}
+
+/* --- Messages de confirmation --- */
+
+.messages ul {
+    border: 2px solid #1a6b35;
+    border-radius: 4px;
+    color: #1a6b35; /* 6,5:1 sur blanc */
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0.75rem;
+}
+
+.messages .message-error {
+    color: #b00020;
+}
+
+/* --- Formulaires de billets et de critiques --- */
+
+.post-form,
+.form-box {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 45rem;
+}
+
+.form-box {
+    border: 1px solid #1a1a1a;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.form-box > legend,
+.form-box-title {
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0 0 1rem;
+    padding: 0 0.25rem;
+    text-align: left;
+}
+
+.post-form > .form-note {
+    margin-top: -0.5rem;
+}
+
+/* --- Billets et critiques affichés --- */
+
+.flux-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.post-list,
+.confirm-text,
+main > .post {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 30rem;
+}
+
+.post {
+    border: 1px solid #1a1a1a;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.post-embedded {
+    margin: 0.75rem 0 0;
+}
+
+.form-box .post {
+    margin: 0 auto;
+    max-width: 34rem;
+}
+
+.post-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    justify-content: space-between;
+}
+
+.post-header p {
+    margin: 0;
+}
+
+.post-date {
+    color: #4a4a4a;
+    font-size: 0.85rem;
+}
+
+.post-title-line {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+}
+
+.post .post-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    text-align: left;
+}
+
+.rating {
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.post-image {
+    display: block;
+    height: auto;
+    margin: 0.5rem 0;
+    max-height: 12rem;
+    max-width: 8rem;
+}
+
+.post-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+.post-actions .button {
+    min-width: 0;
+}
+
+.empty-state {
+    text-align: center;
 }
 
 /* --- Petits écrans : colonnes empilées --- */

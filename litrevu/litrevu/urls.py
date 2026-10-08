@@ -13,6 +13,18 @@ urlpatterns = [
     path("signup/", authentication.views.signup_page, name="signup"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("flux/", reviews.views.flux, name="flux"),
+    path("posts/", reviews.views.posts, name="posts"),
+    path("tickets/create/", reviews.views.ticket_edit, name="ticket_create"),
+    path("tickets/<int:ticket_id>/edit/", reviews.views.ticket_edit, name="ticket_update"),
+    path("tickets/<int:ticket_id>/delete/", reviews.views.ticket_delete, name="ticket_delete"),
+    path(
+        "tickets/<int:ticket_id>/review/",
+        reviews.views.review_edit,
+        name="review_create_for_ticket",
+    ),
+    path("reviews/create/", reviews.views.review_create, name="review_create"),
+    path("reviews/<int:review_id>/edit/", reviews.views.review_edit, name="review_update"),
+    path("reviews/<int:review_id>/delete/", reviews.views.review_delete, name="review_delete"),
 ]
 
 if settings.DEBUG:

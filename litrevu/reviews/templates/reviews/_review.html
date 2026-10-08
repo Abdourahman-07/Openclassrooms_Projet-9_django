@@ -1,0 +1,31 @@
+{% comment %}
+    Affiche une critique et le billet auquel elle répond.
+    - heading_level : niveau du titre (2 par défaut) ;
+    - show_actions : boutons Modifier / Supprimer.
+{% endcomment %}
+{% with level=heading_level|default:2 %}
+<article class="post">
+    <header class="post-header">
+        <p class="post-author">
+            {% if review.user == user %}Vous avez publié une critique{% else %}{{ review.user.username }} a publié une critique{% endif %}
+        </p>
+        <p class="post-date"><time datetime="{{ review.time_created|date:'c' }}">{{ review.time_created|date:"H:i, j F Y" }}</time></p>
+    </header>
+    <div class="post-title-line">
+        <h{{ level }} class="post-title">{{ review.headline }}</h{{ level }}>
+        {# Les étoiles sont décoratives : la note est donnée en texte aux lecteurs d'écran #}
+        <p class="rating">
+            <span aria-hidden="true">{% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</span>
+            <span class="visually-hidden">Note : {{ review.rating }} sur 5</span>
+        </p>
+    </div>
+    {% if review.body %}<p>{{ review.body|linebreaksbr }}</p>{% endif %}
+    {% include "reviews/_ticket.html" with ticket=review.ticket embedded=True show_actions=False heading_level=level|add:1 %}
+    {% if show_actions %}
+        <div class="post-actions">
+            <a class="button" href="{% url 'review_update' review.pk %}">Modifier<span class="visually-hidden"> la critique « {{ review.headline }} »</span></a>
+            <a class="button" href="{% url 'review_delete' review.pk %}">Supprimer<span class="visually-hidden"> la critique « {{ review.headline }} »</span></a>
+        </div>
+    {% endif %}
+</article>
+{% endwith %}

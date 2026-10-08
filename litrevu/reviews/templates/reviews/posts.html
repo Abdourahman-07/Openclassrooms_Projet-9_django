@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Vos posts{% endblock %}
+
+{% block content %}
+<h1>Vos posts</h1>
+
+<div class="post-list">
+    {% for post in posts %}
+        {% if post.content_type == "TICKET" %}
+            {% include "reviews/_ticket.html" with ticket=post show_actions=True %}
+        {% else %}
+            {% include "reviews/_review.html" with review=post show_actions=True %}
+        {% endif %}
+    {% empty %}
+        <p class="empty-state">Vous n'avez encore rien publié.</p>
+    {% endfor %}
+</div>
+{% endblock %}

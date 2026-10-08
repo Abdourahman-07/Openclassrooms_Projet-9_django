@@ -4,5 +4,11 @@
 
 {% block content %}
 <h1>Flux</h1>
-<p>Bienvenue, {{ user.username }}. Le flux arrive à la prochaine étape.</p>
+
+<div class="flux-actions">
+    <a class="button" href="{% url 'ticket_create' %}">Demander une critique</a>
+    <a class="button" href="{% url 'review_create' %}">Créer une critique</a>
+</div>
+
+<p class="empty-state">Bienvenue, {{ user.username }}. Le flux arrive à une prochaine étape ; vos publications sont visibles dans « Posts ».</p>
 {% endblock %}

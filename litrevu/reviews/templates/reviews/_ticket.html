@@ -1,0 +1,38 @@
+{% comment %}
+    Affiche un billet.
+    - heading_level : niveau du titre (2 par défaut) ;
+    - embedded : billet affiché dans une critique (« Ticket - auteur ») ;
+    - show_actions : boutons Créer une critique / Modifier / Supprimer.
+{% endcomment %}
+{% with level=heading_level|default:2 %}
+<article class="post{% if embedded %} post-embedded{% endif %}">
+    <header class="post-header">
+        <p class="post-author">
+            {% if embedded %}
+                Ticket - {% if ticket.user == user %}Vous{% else %}{{ ticket.user.username }}{% endif %}
+            {% elif ticket.user == user %}
+                Vous avez publié un ticket
+            {% else %}
+                {{ ticket.user.username }} a demandé une critique
+            {% endif %}
+        </p>
+        <p class="post-date"><time datetime="{{ ticket.time_created|date:'c' }}">{{ ticket.time_created|date:"H:i, j F Y" }}</time></p>
+    </header>
+    <h{{ level }} class="post-title">{{ ticket.title }}</h{{ level }}>
+    {% if ticket.description %}<p>{{ ticket.description|linebreaksbr }}</p>{% endif %}
+    {% if ticket.image %}
+        <img class="post-image" src="{{ ticket.image.url }}" alt="Image du ticket « {{ ticket.title }} »">
+    {% endif %}
+    {% if show_actions %}
+        <div class="post-actions">
+            {% if not ticket.reviews.all %}
+                <a class="button" href="{% url 'review_create_for_ticket' ticket.pk %}">Créer une critique<span class="visually-hidden"> pour « {{ ticket.title }} »</span></a>
+            {% endif %}
+            {% if ticket.user == user %}
+                <a class="button" href="{% url 'ticket_update' ticket.pk %}">Modifier<span class="visually-hidden"> le ticket « {{ ticket.title }} »</span></a>
+                <a class="button" href="{% url 'ticket_delete' ticket.pk %}">Supprimer<span class="visually-hidden"> le ticket « {{ ticket.title }} »</span></a>
+            {% endif %}
+        </div>
+    {% endif %}
+</article>
+{% endwith %}

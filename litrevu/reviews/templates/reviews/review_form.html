@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{% if review %}Modifier votre critique{% else %}Créer une critique{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if review %}Modifier votre critique{% else %}Créer une critique{% endif %}</h1>
+
+<section class="form-box" aria-labelledby="titre-reponse">
+    <h2 id="titre-reponse" class="form-box-title">Vous êtes en train de poster en réponse à</h2>
+    {% include "reviews/_ticket.html" with heading_level=3 show_actions=False %}
+</section>
+
+<form method="post" class="post-form" novalidate>
+    {% csrf_token %}
+    <fieldset class="form-box">
+        <legend>Critique</legend>
+        <p class="form-note">Le titre et la note sont obligatoires.</p>
+        {% include "_non_field_errors.html" %}
+        {% for field in form %}
+            {% include "_form_field.html" %}
+        {% endfor %}
+    </fieldset>
+    <div class="form-actions">
+        <a class="button" href="{% url 'posts' %}">Annuler</a>
+        <button type="submit" class="button">Envoyer</button>
+    </div>
+</form>
+{% endblock %}

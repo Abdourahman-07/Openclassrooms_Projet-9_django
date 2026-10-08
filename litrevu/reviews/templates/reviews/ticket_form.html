@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{% if ticket %}Modifier votre ticket{% else %}Créer un ticket{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if ticket %}Modifier votre ticket{% else %}Créer un ticket{% endif %}</h1>
+
+<form method="post" enctype="multipart/form-data" class="post-form" novalidate>
+    {% csrf_token %}
+    <p class="form-note">Seul le titre est obligatoire.</p>
+    {% include "_non_field_errors.html" %}
+    {% for field in form %}
+        {% if field.name == "image" and ticket.image %}
+            <img class="post-image" src="{{ ticket.image.url }}" alt="Image actuelle du ticket « {{ ticket.title }} »">
+        {% endif %}
+        {% include "_form_field.html" %}
+    {% endfor %}
+    <div class="form-actions">
+        <a class="button" href="{% url 'posts' %}">Annuler</a>
+        <button type="submit" class="button">Envoyer</button>
+    </div>
+</form>
+{% endblock %}

@@ -6,11 +6,11 @@
 <section class="signup" aria-labelledby="titre-inscription">
     <h1 id="titre-inscription">Inscrivez-vous</h1>
     <p class="form-note">Tous les champs sont obligatoires.</p>
-    <form method="post" novalidate>
+    <form method="post" class="auth-form" novalidate>
         {% csrf_token %}
         {% include "_non_field_errors.html" %}
         {% for field in form %}
-            {% include "_form_field.html" %}
+            {% include "_form_field.html" with hide_label=True %}
         {% endfor %}
         <div class="form-actions">
             <a class="button" href="{% url 'login' %}">Retourner</a>

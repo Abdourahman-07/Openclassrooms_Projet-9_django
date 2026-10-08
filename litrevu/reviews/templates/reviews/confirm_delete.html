@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer votre {{ kind }}{% endblock %}
+
+{% block content %}
+<h1>Supprimer votre {{ kind }}</h1>
+
+<p class="confirm-text">
+    Voulez-vous vraiment supprimer {% if kind == "critique" %}cette{% else %}ce{% endif %} {{ kind }} ? Cette action est définitive.
+    {% if kind == "ticket" and post.reviews.exists %}
+        <strong>Les critiques publiées en réponse seront aussi supprimées.</strong>
+    {% endif %}
+</p>
+
+{% include post_template with ticket=post review=post heading_level=2 show_actions=False %}
+
+{# La suppression passe obligatoirement par une requête POST #}
+<form method="post" class="form-actions">
+    {% csrf_token %}
+    <a class="button" href="{% url 'posts' %}">Annuler</a>
+    <button type="submit" class="button">Supprimer définitivement</button>
+</form>
+{% endblock %}

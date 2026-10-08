@@ -13,11 +13,11 @@
 
     <section class="home-login" aria-labelledby="titre-connexion">
         <h2 id="titre-connexion">Connectez-vous</h2>
-        <form method="post" novalidate>
+        <form method="post" class="auth-form" novalidate>
             {% csrf_token %}
             {% include "_non_field_errors.html" %}
             {% for field in form %}
-                {% include "_form_field.html" %}
+                {% include "_form_field.html" with hide_label=True %}
             {% endfor %}
             <input type="hidden" name="next" value="{{ next }}">
             <div class="form-actions">
