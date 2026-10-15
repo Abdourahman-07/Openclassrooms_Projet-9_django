@@ -421,9 +421,65 @@ main > .post {
     text-align: center;
 }
 
-/* --- Petits écrans : colonnes empilées --- */
+/* --- Page Abonnements --- */
 
-@media (max-width: 40rem) {
+.subscriptions {
+    margin: 0 auto 2.5rem;
+    max-width: 44rem;
+}
+
+.follow-form {
+    align-items: flex-start;
+    display: flex;
+    gap: 1rem;
+}
+
+.follow-form .form-field {
+    flex: 1;
+    margin: 0;
+}
+
+.follow-form .form-field input {
+    padding-bottom: 0.6rem;
+    padding-top: 0.6rem;
+}
+
+.follow-form > .button {
+    margin-top: 0.2rem;
+}
+
+.user-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-list li {
+    align-items: center;
+    border: 1px solid #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    min-height: 2.5rem;
+    padding: 0 0 0 0.75rem;
+}
+
+.user-list li + li {
+    border-top: 0;
+}
+
+.user-list form {
+    margin: 0;
+}
+
+.user-list .button {
+    border-radius: 0;
+    border-width: 0 0 0 1px;
+    min-height: 2.5rem;
+}
+
+/* --- Écrans moyens : le menu (4 liens) passe sous le nom du site --- */
+
+@media (max-width: 56rem) {
     .site-header {
         grid-template-columns: 1fr;
         justify-items: center;
@@ -435,6 +491,14 @@ main > .post {
         justify-self: center;
     }
 
+    .nav-list {
+        justify-content: center;
+    }
+}
+
+/* --- Petits écrans : colonnes empilées --- */
+
+@media (max-width: 40rem) {
     .home-columns {
         grid-template-columns: 1fr;
     }

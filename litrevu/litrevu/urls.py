@@ -25,6 +25,8 @@ urlpatterns = [
     path("reviews/create/", reviews.views.review_create, name="review_create"),
     path("reviews/<int:review_id>/edit/", reviews.views.review_edit, name="review_update"),
     path("reviews/<int:review_id>/delete/", reviews.views.review_delete, name="review_delete"),
+    path("subscriptions/", reviews.views.subscriptions, name="subscriptions"),
+    path("subscriptions/<int:follow_id>/unfollow/", reviews.views.unfollow, name="unfollow"),
 ]
 
 if settings.DEBUG:

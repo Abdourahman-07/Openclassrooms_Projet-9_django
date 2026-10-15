@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Abonnements{% endblock %}
+
+{% block content %}
+<h1 class="visually-hidden">Abonnements</h1>
+
+<section class="subscriptions" aria-labelledby="titre-suivre">
+    <h2 id="titre-suivre">Suivre d'autres utilisateurs</h2>
+    <form method="post" class="follow-form auth-form" novalidate>
+        {% csrf_token %}
+        {% include "_non_field_errors.html" %}
+        {% for field in form %}
+            {% include "_form_field.html" with hide_label=True %}
+        {% endfor %}
+        <button type="submit" class="button">Envoyer</button>
+    </form>
+</section>
+
+<section class="subscriptions" aria-labelledby="titre-abonnements">
+    <h2 id="titre-abonnements">Abonnements</h2>
+    {% if following %}
+        <ul class="user-list">
+            {% for follow in following %}
+                <li>
+                    <span>{{ follow.followed_user.username }}</span>
+                    {# Le désabonnement passe par une requête POST #}
+                    <form method="post" action="{% url 'unfollow' follow.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button">Désabonner<span class="visually-hidden"> de {{ follow.followed_user.username }}</span></button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-state">Vous ne suivez encore personne.</p>
+    {% endif %}
+</section>
+
+<section class="subscriptions" aria-labelledby="titre-abonnes">
+    <h2 id="titre-abonnes">Abonnés</h2>
+    {% if followers %}
+        <ul class="user-list">
+            {% for follow in followers %}
+                <li><span>{{ follow.user.username }}</span></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-state">Personne ne vous suit pour l'instant.</p>
+    {% endif %}
+</section>
+{% endblock %}

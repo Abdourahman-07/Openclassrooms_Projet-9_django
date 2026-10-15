@@ -214,3 +214,56 @@ class ReviewViewTests(TestCase):
         self.assertNotContains(response, "Ticket de Bob")
         self.assertContains(response, "Note : 4 sur 5")
         self.assertContains(response, 'aria-current="page"')
+
+
+class SubscriptionViewTests(TestCase):
+    def setUp(self):
+        self.alice = User.objects.create_user(username="alice", password="MotDePasse!2026")
+        self.bob = User.objects.create_user(username="bob", password="MotDePasse!2026")
+        self.carol = User.objects.create_user(username="carol", password="MotDePasse!2026")
+        self.client.force_login(self.alice)
+        self.url = reverse("subscriptions")
+
+    def test_page_requires_login(self):
+        self.client.logout()
+        self.assertRedirects(self.client.get(self.url), f"{reverse('login')}?next={self.url}")
+
+    def test_follow_user_by_name(self):
+        response = self.client.post(self.url, {"username": "Bob"}, follow=True)  # casse ignorée
+        self.assertRedirects(response, self.url)
+        self.assertTrue(UserFollows.objects.filter(user=self.alice, followed_user=self.bob).exists())
+        self.assertContains(response, "Vous êtes maintenant abonné à bob.")
+
+    def test_unknown_user_shows_accessible_error(self):
+        response = self.client.post(self.url, {"username": "inconnu"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Aucun utilisateur ne s&#x27;appelle « inconnu ».")
+        self.assertContains(response, 'aria-invalid="true"')
+        self.assertContains(response, 'id="id_username_errors"')
+        self.assertFalse(UserFollows.objects.exists())
+
+    def test_cannot_follow_self_or_twice(self):
+        self.client.post(self.url, {"username": "alice"})
+        self.assertFalse(UserFollows.objects.exists())
+        self.client.post(self.url, {"username": "bob"})
+        response = self.client.post(self.url, {"username": "bob"})
+        self.assertContains(response, "Vous êtes déjà abonné à bob.")
+        self.assertEqual(UserFollows.objects.count(), 1)
+
+    def test_lists_following_and_followers(self):
+        UserFollows.objects.create(user=self.alice, followed_user=self.bob)
+        UserFollows.objects.create(user=self.carol, followed_user=self.alice)
+        response = self.client.get(self.url)
+        self.assertEqual([f.followed_user for f in response.context["following"]], [self.bob])
+        self.assertEqual([f.user for f in response.context["followers"]], [self.carol])
+        self.assertContains(response, "Désabonner")
+
+    def test_unfollow_requires_post_and_own_subscription(self):
+        follow = UserFollows.objects.create(user=self.alice, followed_user=self.bob)
+        other = UserFollows.objects.create(user=self.carol, followed_user=self.bob)
+        unfollow_url = reverse("unfollow", args=[follow.pk])
+        self.assertEqual(self.client.get(unfollow_url).status_code, 405)
+        self.assertEqual(self.client.post(reverse("unfollow", args=[other.pk])).status_code, 404)
+        self.assertRedirects(self.client.post(unfollow_url), self.url)
+        self.assertFalse(UserFollows.objects.filter(pk=follow.pk).exists())
+        self.assertTrue(UserFollows.objects.filter(pk=other.pk).exists())

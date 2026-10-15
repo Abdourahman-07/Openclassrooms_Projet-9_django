@@ -24,7 +24,10 @@
                         <a href="{% url 'posts' %}"
                            {% if request.resolver_match.url_name == 'posts' %}aria-current="page"{% endif %}>Posts</a>
                     </li>
-                    {# Ajouter « Abonnements » quand la vue existera #}
+                    <li>
+                        <a href="{% url 'subscriptions' %}"
+                           {% if request.resolver_match.url_name == 'subscriptions' %}aria-current="page"{% endif %}>Abonnements</a>
+                    </li>
                     <li>
                         <form method="post" action="{% url 'logout' %}" class="logout-form">
                             {% csrf_token %}

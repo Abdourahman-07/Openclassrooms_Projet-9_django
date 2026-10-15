@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import CharField, Value
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
-from .forms import ReviewForm, TicketForm
-from .models import Review, Ticket
+from .forms import FollowForm, ReviewForm, TicketForm
+from .models import Review, Ticket, UserFollows
 
 
 def form_data(request):
@@ -163,3 +163,35 @@ def review_delete(request, review_id):
         "reviews/confirm_delete.html",
         {"post": review, "post_template": "reviews/_review.html", "kind": "critique"},
     )
+
+
+@login_required
+def subscriptions(request):
+    """Liste des abonnements et des abonnés, avec le formulaire pour suivre quelqu'un."""
+    data, _ = form_data(request)
+    form = FollowForm(data, user=request.user)
+    if request.method == "POST" and form.is_valid():
+        UserFollows.objects.create(user=request.user, followed_user=form.followed_user)
+        messages.success(request, f"Vous êtes maintenant abonné à {form.followed_user.username}.")
+        return redirect("subscriptions")
+
+    context = {
+        "form": form,
+        "following": request.user.following.select_related("followed_user").order_by(
+            "followed_user__username"
+        ),
+        "followers": request.user.followed_by.select_related("user").order_by("user__username"),
+    }
+    return render(request, "reviews/subscriptions.html", context)
+
+
+@login_required
+@require_POST
+def unfollow(request, follow_id):
+    """Supprime un abonnement de l'utilisateur courant (POST uniquement)."""
+    follow = get_object_or_404(
+        UserFollows.objects.select_related("followed_user"), pk=follow_id, user=request.user
+    )
+    follow.delete()
+    messages.success(request, f"Vous êtes désabonné de {follow.followed_user.username}.")
+    return redirect("subscriptions")
